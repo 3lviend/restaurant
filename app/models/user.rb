@@ -5,9 +5,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :role
-#  validates :name, length: { minimum: 2 }
+  # validates :name, length: { minimum: 2 }
   # validates_presence_of :password, :email
-  validates :password, length: { minimum: 6}
+  # validates :password, length: { minimum: 6}
   # validates :email, uniqueness: true
 
   before_create :generate_authentication_token!

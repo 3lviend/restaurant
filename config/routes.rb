@@ -74,7 +74,8 @@ Rails.application.routes.draw do
 
   # for api
   namespace :api, constraints: {format: :json} do
-    match '/sessions' => 'sessions#create', via: [:post, :options ]
+    # match '/sessions' => 'sessions#create', via: [:post, :options ]
+    resources :sessions, only:[:create, :delete]
   end
   
 end
