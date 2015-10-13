@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  detail_of_item: MyText
+  price: 9.99
+  portion: 1
+  type: 
+  available: false
+
+two:
+  name: MyString
+  detail_of_item: MyText
+  price: 9.99
+  portion: 1
+  type: 
+  available: false

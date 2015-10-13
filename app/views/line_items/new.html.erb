@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h2 class="page-header">New Order</h2>
+  </div>
+</div>
+<div class="row">
+<div class="col-lg-12">
+  <h4><b><%= "Order ID : #{@line_item.order_id}" %></b></h4>
+    <% unless params[:table_id].nil? %>
+      <h4><b><%= "Table #{params[:table_id]}" %></b></h4>
+    <% end %>
+  </div>
+</div>
+<%= render "shared/search_form" %>
+<%= render "shared/result_search" %>

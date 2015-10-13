@@ -1,0 +1,27 @@
+<div class="row">
+  <%= form_for(@waitress, url: url ) do |f| %>
+     <% if @waitress.errors.any? %>
+      <ul class="alert alert-danger" style="margin-top:10px">
+        <% @waitress.errors.full_messages.each do |msg| %>
+         <li style="margin-left:10px"><%= msg %></li>
+         <% end %>
+      </ul>
+    <% end %>
+    <div class="col-md-4">
+      <%=f.label 'Email' %>
+      <%=f.text_field :email, class:"form-control", autofocus: true%>
+      <br>
+      
+      <%=f.label 'Password' %>
+      <%=f.text_field :password, class:"form-control" %>
+      <br>
+
+      <%=f.label 'Password Confirmation' %>
+      <%=f.text_field :password_confirmation, class:"form-control" %>
+      <br>
+
+      <%= f.submit 'Save', class:'btn btn-primary' %>
+      <%= link_to 'Back', waitress_index_path, class:'btn btn-default' %>
+    </div>
+  <% end %>
+</div>

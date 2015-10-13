@@ -1,0 +1,153 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h2 class="page-header">Update Order</h2>
+  </div>
+</div>
+<!-- <%# @line_item.line_items.each do |o| %>
+<%#= o.id %><br>
+<%#= o.item.id %> <%#= o.item.name %><br>
+<%#= o.quantity %><br>
+<%#= o.order_id %><br>
+<%#= o.complete %><br>
+<%# end %> -->
+<%= render "shared/search_form" %>
+<%#= render "shared/result_search" %>
+<div class="row">
+  <div class="col-md-12 cs-col">
+    <%= form_tag('/line_items') %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Items</th>
+            <th>Quantity</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody class="selected_item">
+        <% if params[:action].eql? "edit" %>
+          <% @line_item.line_items.each do |o| %>
+          <tr class="<%= o.item_id %>">
+            <input name="line_items[<%= o.item_id %>][order_id]" type="hidden" value="<%=o.order_id%>">
+            <td><input type="hidden" name="line_items[<%= o.item_id %>][item_id]" value="<%=o.item_id%>"><%=o.item.name%></td>
+            <td><input name="line_items[<%= o.item_id %>][quantity]" type="number" value="<%=o.quantity%>" required></td>
+            <td><a href="#" class="btn btn-warning <%= o.item_id %>">X</a></td>
+          </tr>
+          <% end %>
+          <!-- <tr class="5">
+          <input name="line_items[5][order_id]" type="hidden" value="<%#= @line_item.order_id %>">
+          <td><input type="hidden" name="line_items[5][item_id]" value="5">Jus Apel</td>
+          <td><input name="line_items[5][quantity]" type="number" required=""></td>
+          <td><a href="#" class="btn btn-warning 5">X</a></td>
+          </tr> -->
+        <% end %>
+
+        </tbody>
+      </table>
+      <input type="submit" class="btn btn-primary" value="Save" >
+  </div>
+</div>
+<script>
+function autoCompleteItem(){
+  $(function() {
+    $( "#searchItems" ).autocomplete({
+      
+      source: function( request, response ) {
+              $.ajax({
+                url: "http://localhost:3000/search_item.json",
+                data: {term: request.term},
+                dataType: "json",
+                  success: function( data ) {
+                    response( $.map( data, function( v ) {
+                      return {
+                        id: v.id,
+                        label: v.name,
+                        value: v.name,  
+                        desc:  v.detail_of_item,
+                        price:  v.price,
+                        portion:  v.portion,
+                        available:  v.available,
+                        type:       v.type_of_item
+                      }
+                    }));
+                  }
+              });
+              // console.log($.ajax);
+      },
+
+      focus: function (event, ui) {
+            var name = ui.item.value;
+            var type = ui.item.type;
+            var desc = ui.item.desc;
+            var price = ui.item.price;
+            var portion = ui.item.portion;
+            if (ui.item.available == true) {
+              var available = "Available";
+              }else{
+              var available = "Not Available";
+            };
+            
+            $(".item_description").show();
+            $(".item_description h5").remove();
+            $(".item_description").append('<h5><b>'+name+'</b></h5>');
+            $(".item_description").append('<h5>Type : '+type+'</h5>');
+            $(".item_description").append('<h5>Description : '+desc+'</h5>');
+            $(".item_description").append('<h5>Price : '+price+' Ribu</h5>');
+            $(".item_description").append('<h5>Portion : '+portion+' Orang</h5>');
+            $(".item_description").append('<h5>Status : '+available+'</h5>');
+          },
+
+      select: function (e, ui) {
+            var _id = ui.item.id
+            var _name = ui.item.value
+            var _available = ui.item.available
+            // function clearText(this_item){
+            //   if (this_item.val()!= ""){
+            //     this_item.val("");
+            //   return false;
+            //   }
+            // }
+            // console.log($(this).val(""));
+            
+            if (_available == false){
+
+              $(".alert").show().html("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button><strong>Sorry,</strong> to now <strong>"+_name+"</strong> is Not Available");
+              $(this).val("");
+              return false;
+
+            }else if ($(".selected_item tr").hasClass(_id) == true ) {
+                
+              $(".alert").show().html("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please fill the quantity for reserve <strong>"+_name+"</strong> again");
+              $(this).val("");
+              return false;
+             
+            }else{
+              
+              $(".selected_item").append("<tr class='"+_id+"'>"+
+                                        "<input name='line_items["+_id +"][order_id]' type='hidden' value='<%= @line_item.order_id %>' >"+
+                                        "<td><input type='hidden' name='line_items["+_id+"][item_id]' value='"+_id+"' >"+_name + "</td>"+
+                                        "<td><input name='line_items["+_id+"][quantity]' type='number' required></td>"+
+                                        "<td><a href='#' class='btn btn-warning "+_id+"' >X</a></td>"+
+                                        "</tr>");
+              $(".alert").hide();
+              $(".selected_item a."+_id).click(function(){
+                $(".selected_item tr."+_id).remove();
+              });
+              $(this).val("");
+              return false;
+            }
+      },
+
+      close: function() {
+      $(".item_description").hide();
+
+      },
+
+      change: function(event){
+               $(this).val("");  
+               return false;
+      }
+    });
+  }); 
+}
+  autoCompleteItem();
+</script>

@@ -1,0 +1,16 @@
+<div class="row">
+  <%= form_for @order do |f| %>
+    <div class="col-md-6">
+      <%=f.label 'Table id' %>
+      <%=f.text_field :table_id %>
+
+      <%= f.label  'status' %>
+      <%= f.text_field :status %>
+    <br>
+
+      <%= f.submit 'Save', class:'btn btn-primary' %>
+      <%= link_to 'Back', orders_path, class:"btn btn-default" %>
+
+    </div>
+  <% end %>
+</div>

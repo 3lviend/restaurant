@@ -1,0 +1,72 @@
+<div class="row">
+  <% u = @your_order %>
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="pull-right">
+              <% if u.status.eql? "paid" %>
+                <input type="checkbox" checked data-id="<%= u.id %>" class="<%= u.id %> status-order" checked data-toggle="toggle" data-on="Paid" data-off="Unpaid" data-onstyle="info" data-on="<i class='fa fa-table fa-fw'></i>" >
+              <% else %>
+                <input type="checkbox" data-id="<%= u.id %>" class="<%= u.id %> status-order" data-toggle="toggle" data-on="Paid" data-off="Unpaid" data-onstyle="info">
+              <% end %>
+            </div>
+            
+            <h4>
+            <% if u.table.nil? %>
+              No Table |
+             <% else %>
+              <%= u.table.name %>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+            <% end %>
+              Order Id: <%= u.id unless u.id.nil? %>
+            </h4>
+
+        </div>
+          <div class="panel-body">
+               <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Items</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Sum Price</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% sum_price = 0 %>
+                <% total_price = 0 %>
+                <% u.line_items.each_with_index do |li, i|%>
+                  <tr>
+                    <td><%= i+1%></td>
+                    <td><%= li.item.name unless li.item.nil? %></td>
+                    <td><%= li.quantity unless li.item.nil? %></td>
+                    <td><%= number_to_currency(li.item.price, unit: "Rp. ") unless li.item.nil? %></td>
+                    <td><%= number_to_currency(li.quantity * li.item.price, unit: "Rp. ") %></td>
+                    <% if li.complete.eql? true %>
+                      <td><span class="badge badge-green">Complete</span></td>
+                    <% else %>
+                      <td><span class="badge badge-red">Uncomplete</span></td>
+                      <% end %>
+                  </tr>
+                  <% sum_price = (li.quantity * li.item.price) %>
+                  <% total_price = total_price + sum_price %>
+                <%end %>
+                <tr>
+                
+                 <td colspan="4" align="right"><h4><strong> Total :</strong></h4></td>
+                 <td colspan="2"align="left"><h4><strong> <%= number_to_currency(total_price, unit: "Rp. ") %></strong></h4></td>
+                </tr>
+                
+            </tbody>
+          </table>  
+              <%= link_to edit_line_item_path, class: "btn btn-primary" do %>
+                  <i class="fa fa-edit fw"></i> Update This Order
+              <% end %>
+          </div>
+          <div class="panel-footer">
+              Thanks For Order
+          </div>
+        </div>
+</div>
+<%= render "shared/loading_modal" %>

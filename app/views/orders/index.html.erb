@@ -1,0 +1,30 @@
+<%= link_to "Order Without A Table", new_order_without_table_path, class: "btn btn-info", "data-no-turbolink" => true %>
+<hr>
+<br>
+<div class="row">
+<% if @table.blank? %>
+  <h4 class="text-center">All Table Is Full </h4>
+<% else %>
+  <% @table.each do |t| %>
+    <div class="col-md-3">
+      <% if t.available.eql? false %>
+        <div class="table-all btn btn-danger ">
+        <% unless t.orders.last.blank? %>
+          <h5><b><%= link_to "#{t.name} (Not Ready)", your_order_path(t.orders.last.id), "data-no-turbolink" => true %></b></h5>
+          <%end%>
+        </div>
+      <% else %>
+        <div class="table-all btn btn-info">
+          <h5><b><%= link_to "#{t.name}", new_order_table_line_items_path(t), "data-no-turbolink" => true%></b></h5>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+</div>
+<script type="text/javascript">
+  function reload(){
+    window.location.reload();
+  };
+  setInterval('reload()', 300000);
+</script>

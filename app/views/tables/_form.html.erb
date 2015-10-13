@@ -1,0 +1,21 @@
+<div class="row">
+  <%= form_for @table  do |f| %>
+   <% if @table.errors.any? %>
+    <ul class="alert alert-danger" style="margin-top:10px">
+      <% @table.errors.full_messages.each do |msg| %>
+       <li style="margin-left:10px"><%= msg %></li>
+       <% end %>
+    </ul>
+  <% end %>
+  <div class="col-md-6">
+    <%=f.label 'Name' %>
+    <%=f.text_field :name, autofocus:true, class:"form-control", required:true %>
+    <br>
+    <%=f.label 'Available' %>
+    <%= f.select :available, options_for_select([[ "Available", true],["Not available","false"] ], :selected => @table.available),{}, class:"form-control" %><br>
+    <%= f.submit 'Save', class: 'btn btn-success' %>
+    <%= link_to 'Back', tables_path, class: "btn btn-default", "data-no-turbolink" => true %>
+  </div>
+  <% end %>
+</div>
+<%#= params %>

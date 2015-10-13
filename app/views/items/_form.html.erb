@@ -1,0 +1,42 @@
+<div class="row">
+  <%= form_for @item do |f| %>
+    <% if @item.errors.any? %>
+      <ul class="alert alert-danger" style="margin-top:10px">
+        <% @item.errors.full_messages.each do |msg| %>
+         <li style="margin-left:10px"><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end %>
+      <div class="col-md-4">
+        <%=f.label 'Name' %>
+        <%=f.text_field :name, class: "form-control", autofocus: true, placeholder: "Jus Mangga", required:true %>
+        <br>
+
+        <%= f.label  'Detail Of Item' %>
+        <%= f.text_area :detail_of_item , class: "form-control", placeholder: "Jus dari buah mangga yang segar", required:true%>
+        <br>
+
+        <%=f.label 'Price' %>
+        <div class="form-group input-group">
+          <span class="input-group-addon">Rp.</span>
+          <%=f.number_field :price, min: 1, class: "form-control",placeholder: "20000", required:true %>
+        </div>
+        <br>
+            
+          <%= f.label 'Portion'%>
+        <div class="form-group input-group">
+          <%= f.number_field :portion, min: 1 , class: "form-control", placeholder: "1", required:true%>
+          <span class="input-group-addon">Orang</span>
+        </div>
+
+        <%= f.label 'Type' %>
+        <%= f.select :type_of_item, options_for_select([[ "Makanan","Makanan"],["Minuman","Minuman"] ], :selected => @item.type_of_item),{},class: 'form-control' %>
+        <br>
+        <%= f.label 'Available' %>
+        <%= f.select :available, options_for_select([["Available","true"], ["Not available","false"]], :selected => @item.available),{},class: 'form-control'%>
+      <br>
+      <%= f.submit 'Save', class: 'btn btn-success' %>
+      <%= link_to 'Back', items_path, class: "btn btn-default", "data-no-turbolink" => true %>
+    </div>
+    <% end %>
+</div>

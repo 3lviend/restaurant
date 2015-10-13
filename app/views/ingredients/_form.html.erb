@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-md-4">      
+    <%= form_for @ingredient do |f| %>
+      <% if @ingredient.errors.any? %>
+        <ul class="alert alert-danger" style="margin-top:10px">
+          <% @ingredient.errors.full_messages.each do |msg| %>
+           <li style="margin-left:10px"><%= msg %></li>
+          <% end %>
+        </ul>
+      <% end %>
+        <%= f.label 'Name'%>
+        <%= f.text_field :name, class: "form-control", placeholder: "Bawang Putih",  autofocus: true, required:true %>
+        <br>
+      
+        <%= f.label 'Quantity'%>
+        <%= f.number_field :quantity, min: 1, class: "form-control", placeholder: "20", required:true%>
+        <br>      
+        <%= f.label 'Detail Of Quantity'%>
+        <%= f.text_area :detail_of_quantity , class: "form-control", placeholder: "kilogram", required:true%>
+        <br>
+
+        <%= f.submit 'Save', class: 'btn btn-success'%>
+        <%= link_to 'Back', ingredients_path, class: "btn btn-default", "data-no-turbolink" => true %>
+    <% end %>
+  </div>
+</div>

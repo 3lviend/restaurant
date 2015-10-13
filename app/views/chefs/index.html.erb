@@ -1,0 +1,42 @@
+<div class="row">
+  <% @unpaid.each do |u| %>
+    <div class="col-md-4">
+      <div class="quicklink">
+        <h5><b><%= u.table.name unless u.table.nil?%></b></h5>
+        <div class="row order-status">
+          <div class="col-sm-6">Order Id : <%= u.id %></div>
+        </div>
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <td>No</td>
+                <td>Items</td>
+                <td>Status</td>
+              </tr>
+            </thead>
+            <tbody>
+                <% u.line_items.each_with_index do |li, i|%>
+                <tr>
+                  <td><%= i+1%></td>
+                  <td><%= li.item.name unless li.item.nil? %></td>
+                  <!-- <td><%#= li.id %></td> -->
+                  <% if li.complete.eql? true %>
+                    <td><input type="checkbox" class="item" data-id="<%= li.id %>" checked></td>
+                  <% else %>
+                    <td><input type="checkbox" class="item" data-id="<%= li.id %>"></td>
+                    <% end %>
+                </tr>
+                <% end %>
+            </tbody>
+          </table>
+      </div>
+    </div>
+  <% end %>
+</div>
+<script type="text/javascript">
+  function reload(){
+    window.location.reload();
+  };
+
+  setInterval('reload()', 30000);
+</script>

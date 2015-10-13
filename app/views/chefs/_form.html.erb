@@ -1,0 +1,26 @@
+<div class="row">
+  <%= form_for(@chef, url: url ) do |f| %>
+  <% if @chef.errors.any? %>
+    <ul class="alert alert-danger" style="margin-top:10px">
+      <% @chef.errors.full_messages.each do |msg| %>
+       <li style="margin-left:10px"><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <div class="col-md-4">
+    <%=f.label 'Email' %>
+    <%=f.text_field :email, class:"form-control",  autofocus: true %>
+    <br>
+    
+    <%=f.label 'Password' %>
+    <%=f.text_field :password, class:"form-control" %>
+    <br>
+
+    <%=f.label 'Password Confirmation' %>
+    <%=f.text_field :password_confirmation, class:"form-control" %>
+    <br>
+
+    <%= f.submit 'Save', class:'btn btn-primary' %>
+  </div>
+  <% end %>
+</div>

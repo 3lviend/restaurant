@@ -1,0 +1,28 @@
+
+<br><div class="row">
+<% @table.each do |t| %>
+  <div class="col-md-4">
+    <div class="quicklink">
+      <h5><b><%=t.name%></b></h5>
+      <div class="input-group custom-search-form">
+         <%#= form_tag(new_order_path, :method => "get", id: "search-form") do %>
+         <%= form_tag(new_order_path, :method => "get", class: "search-form") do %>
+         <%= text_field_tag :search, params[:search], class:"form-control search-query cs-form", placeholder: "search item", type: "search", data: {autocomplete: autocomplete_item_orders_path} %>  
+         <span class="input-group-btn">
+         <%= button_tag(type: "submit", class: "btn btn-default cs-btn") do %>
+          <i class="fa fa-search"></i>
+        <% end %>
+        <% end %>
+      </div >
+    </div>
+  </div>
+<%end%>
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+  $('.search').bind('railsAutocomplete.select', function(event, data){
+  $('.search-form').submit()
+  });
+</script>
+

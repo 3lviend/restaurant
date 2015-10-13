@@ -1,0 +1,12 @@
+<div class="row">
+  <%= form_for(@paid, url: update_paid_path, method: :put) do |f| %>
+    <div class="col-lg-12">
+      <%=f.label :status %>
+    </div>
+    <div class="col-lg-12">
+      <%= f.radio_button :status, "paid" %>  
+      <%=f.label :status, "paid", :value => "paid" %>
+    </div>
+    <%= f.submit 'Save', class:'btn btn-primary' %>
+  <% end %>
+</div>
