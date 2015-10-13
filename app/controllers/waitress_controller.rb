@@ -10,7 +10,6 @@ class WaitressController < ApplicationController
     # @waitress = User.where(:role => "waitress")
     # @waitress = User.where(:role_id => 2)
     # @waitress = Role.where(:name => "waitress")
-    # debugger
     # @waitress = Role.where(:name => "waitress")
     # user = User.all
   end
@@ -23,7 +22,6 @@ class WaitressController < ApplicationController
     role_w = Role.find_by_name "waitress"
     params[:user][:role_] = role_w 
     @waitress = User.new(waitress_params)
-    debugger
     if @waitress.save
       redirect_to waitress_index_path
     else

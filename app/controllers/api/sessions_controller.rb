@@ -21,7 +21,6 @@ module Api
 
 		def delete
 			user = User.find_by(access_token: params[:id])
-			debugger
 			user.save
 			head 204
 		end

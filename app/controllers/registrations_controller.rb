@@ -5,7 +5,6 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def create
-    # debugger
     waitress = Role.find_by_name "waitress"
     params[:user][:role_id] = waitress.id
     @user = User.new(params_user)

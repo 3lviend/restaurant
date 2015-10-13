@@ -12,8 +12,6 @@ class OrdersController < ApplicationController
 
   def new
     @order = Order.new(:table_id => params[:id], :status => "unpaid").line_items.new
-    # debugger
-
     @items = Item.all
   end
 
@@ -60,8 +58,7 @@ class OrdersController < ApplicationController
   def your_order
     # order_table_unpaid = Order.includes(:table, :line_items).where("orders.status = 'unpaid' and orders.table_id is not null").order("orders.table_id ASC")
     order_table_unpaid = Order.includes(:table, :line_items).where("orders.table_id is not null").order("orders.table_id ASC")
-    # debugger
-      @your_order = order_table_unpaid.find(params[:id]) 
+    @your_order = order_table_unpaid.find(params[:id]) 
     # if @your_order.nil?
     #    puts "nil"
     # end

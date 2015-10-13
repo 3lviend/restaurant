@@ -22,7 +22,6 @@ class ItemsController < ApplicationController
   def edit;end
 
   def update
-    debugger
     if @item.update(item_params)
        redirect_to items_path
     else

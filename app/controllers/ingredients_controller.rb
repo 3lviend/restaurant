@@ -19,7 +19,6 @@ class IngredientsController < ApplicationController
      else
       # render 'new', error: "#{ @review.errors.full_messages.to_sentence }"
       # flash[:error] = "Item not created"
-      # debugger
       render new_ingredient_path
     end
   end

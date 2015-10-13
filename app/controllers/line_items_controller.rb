@@ -7,7 +7,6 @@ class LineItemsController < ApplicationController
 
   def new
     @line_item = Order.create(:table_id => params[:table_id], :status => "unpaid").line_items.new
-    # debugger
     @table = Table.update(params[:table_id], available: false);
   end
 
@@ -16,8 +15,6 @@ class LineItemsController < ApplicationController
   end
 
   def edit
-    debugger
-
   end
   
   def show;end
@@ -30,7 +27,6 @@ class LineItemsController < ApplicationController
       @line_items = LineItem.new(line_item_params(key))
       # counting += 1 if @line_item.save
       # error += 1 unless condition
-      # debugger
       if @line_items.save
         counting +=1
       else
@@ -38,7 +34,6 @@ class LineItemsController < ApplicationController
       end
     end
 
-    debugger
     if counting > 0 
       # redirect_to your_order
       redirect_to orders_path
