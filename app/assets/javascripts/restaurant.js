@@ -177,7 +177,10 @@ function statusOrder(){
 
 
 $(document).ready(function(){
-    statusItem();
-    statusOrder();
+  if ($(".selected tr").hasClass("append") == false) {
+      $(".add-item").prop("disabled", true)
+  };
+  statusItem();
+  statusOrder();
     // autoCompleteItem();
 });

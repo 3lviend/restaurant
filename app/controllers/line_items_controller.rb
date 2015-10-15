@@ -1,6 +1,7 @@
 class LineItemsController < ApplicationController
 
-  before_action :set_line_items, only:[:edit, :update, :destroy]
+  before_action :set_orders, only:[:edit]
+  # before_action :set_line_items, only:[:edit_quantity]
   before_action :authenticate_user!
   
   def index;end
@@ -14,8 +15,7 @@ class LineItemsController < ApplicationController
     @line_item = Order.create(:table_id => nil, :status => "unpaid").line_items.new
   end
 
-  def edit
-  end
+  def edit;end
   
   def show;end
 
@@ -42,44 +42,43 @@ class LineItemsController < ApplicationController
     end
   end
 
-  # def update
-  #   if @ingredient.update(ingredient_params) 
-  #      redirect_to ingredients_path
-  #   else
-  #     render new_ingredient_path
-  #   end
-  # end
-
   def update
-    count_update = 0
-    error_update = 0
-    params[:line_items].each do |key, value|
-      if @line_items.update(line_item_params(key))
-        count_update += 1
-      else
-        error +=1
-      end
-    end
-    if count_update > 0
-      redirect_to orders_path
+   @line_item = LineItem.find(params[:id])
+   if @line_item.update(edit_quantity_params)
+      redirect_to edit_line_item_path(params[:line_item][:order_id])
     else
-      redirect_to :back
+      render :back
     end
   end
 
   def destroy
-    
+    @line_item = LineItem.find(params[:id])
+    if @line_item.destroy
+      redirect_to :back
+    end
   end
+  
+  def edit_quantity
+      @line_item = LineItem.find(params[:line_item_id])
+  end 
 
   private
 
     def set_line_items
-      @line_item = Order.find(params[:id])
+      @line_item = LineItem.find(params[:line_item_id])
     end
 
-  def line_item_params(key)
-    params[:line_items].require(key).permit(:order_id, :item_id, :quantity)
-  end
+    def set_orders
+      @order = Order.find(params[:id])
+    end
+
+    def line_item_params(key)
+      params[:line_items].require(key).permit(:order_id, :item_id, :quantity)
+    end
+
+    def edit_quantity_params
+      params.require(:line_item).permit(:quantity, :item_id, :order_id)
+    end
   # {"utf8"=>"✓", "authenticity_token"=>"jOUW9ZHNlo+LlRg1zgX6eRCnE40owAIgMWOaYxp3OOWaDCrh4oBYDCFab1olmOvEGzVludAmX//oojMc3d1haA==",
   # "line_items"=>
   # {

@@ -6,7 +6,7 @@
   <% @order_table_unpaid.each do |t| %>
     <div class="col-md-4">
       <div class="quicklink">
-        <h5><b><%= link_to "#{t.table.name}", your_order_path(t) %></b></h5>
+        <h5><b><%= link_to "#{t.table.name}", your_order_path(t), "data-no-turbolink" => true %></b></h5>
       </div>
     </div>
   <% end %>

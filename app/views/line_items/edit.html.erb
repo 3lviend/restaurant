@@ -3,13 +3,6 @@
     <h2 class="page-header">Update Order</h2>
   </div>
 </div>
-<!-- <%# @line_item.line_items.each do |o| %>
-<%#= o.id %><br>
-<%#= o.item.id %> <%#= o.item.name %><br>
-<%#= o.quantity %><br>
-<%#= o.order_id %><br>
-<%#= o.complete %><br>
-<%# end %> -->
 <%= render "shared/search_form" %>
 <%#= render "shared/result_search" %>
 <div class="row">
@@ -18,32 +11,44 @@
       <table class="table table-striped">
         <thead>
           <tr>
+            <th>No</th>
             <th>Items</th>
             <th>Quantity</th>
+            <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody class="selected_item">
-        <% if params[:action].eql? "edit" %>
-          <% @line_item.line_items.each do |o| %>
-          <tr class="<%= o.item_id %>">
-            <input name="line_items[<%= o.item_id %>][order_id]" type="hidden" value="<%=o.order_id%>">
-            <td><input type="hidden" name="line_items[<%= o.item_id %>][item_id]" value="<%=o.item_id%>"><%=o.item.name%></td>
-            <td><input name="line_items[<%= o.item_id %>][quantity]" type="number" value="<%=o.quantity%>" required></td>
-            <td><a href="#" class="btn btn-warning <%= o.item_id %>">X</a></td>
-          </tr>
-          <% end %>
+         <% LineItem.where(:order_id => @order.id).each_with_index do | line_item , i| %>
+         <tr class="<%=line_item.item_id%>">
+           <!-- <input name="line_items[<%=line_item.item_id%>][order_id]" type="hidden" value="<%= @order.id %>"> -->
+           <td><%= i+1 %> </td>
+           <td><%= line_item.item.name unless line_item.item.nil? %></td>
+           <% if line_item.complete.eql? true %>
+              <td><input class="form-control" type="number" disabled value="<%= line_item.quantity %>"></td>
+              <td><span class="badge badge-green">Complete</span></td>
+              <td><a href="#" class="btn btn-warning disabled">X</a></td>
+            <% else %>
+              <!-- <td><input name="line_items[<%#=line_item.item_id%>][quantity]" type="number" required><%#= line_item.quantity %></td> -->
+              <td><input class="form-control" style="width:48%;float: left" type="number" disabled value="<%= line_item.quantity %>">
+              <%= link_to "Edit quantity", edit_quantity_line_items_path(line_item), 'data-no-turbolink' => true, class: "btn btn-info form-control", style:"width:48%;float:right"%>
+              </td>
+              <td><span class="badge badge-red">Uncomplete</span></td>
+              <td> <%= link_to "X", line_item, method: :delete, data:{confirm: "Are You Sure"}, class: "btn btn-warning " %></td>
+            <% end %>
+         </tr>
+         <% end %>
           <!-- <tr class="5">
           <input name="line_items[5][order_id]" type="hidden" value="<%#= @line_item.order_id %>">
           <td><input type="hidden" name="line_items[5][item_id]" value="5">Jus Apel</td>
           <td><input name="line_items[5][quantity]" type="number" required=""></td>
           <td><a href="#" class="btn btn-warning 5">X</a></td>
           </tr> -->
-        <% end %>
 
         </tbody>
       </table>
-      <input type="submit" class="btn btn-primary" value="Save" >
+      <input type="submit" class="add-item btn btn-primary" value="Save">
+      <%= link_to "Back", :back, class: "btn btn-warning" %>
   </div>
 </div>
 <script>
@@ -121,16 +126,21 @@ function autoCompleteItem(){
               return false;
              
             }else{
-              
-              $(".selected_item").append("<tr class='"+_id+"'>"+
-                                        "<input name='line_items["+_id +"][order_id]' type='hidden' value='<%= @line_item.order_id %>' >"+
-                                        "<td><input type='hidden' name='line_items["+_id+"][item_id]' value='"+_id+"' >"+_name + "</td>"+
-                                        "<td><input name='line_items["+_id+"][quantity]' type='number' required></td>"+
+              var no = $(".selected_item tr").length
+              no+=1;
+              $(".selected_item").append("<tr class='append "+_id+"'>"+
+                                        "<input name='line_items["+_id +"][order_id]' type='hidden' value='<%= @order.id %>' >"+
+                                        "<td>"+ no +"</td>"+
+                                        "<td ><input type='hidden' name='line_items["+_id+"][item_id]' value='"+_id+"' >"+_name + "</td>"+
+                                        "<td><input name='line_items["+_id+"][quantity]' type='number' class='form-control input-group cs' required><span class='input-group-addon cs'>Orang</span></td>"+
+                                        "<td><span class='badge badge-info' style='margin-top: 6px;'>New Item</span></td>"+
                                         "<td><a href='#' class='btn btn-warning "+_id+"' >X</a></td>"+
                                         "</tr>");
+              $(".add-item").prop("disabled", false)
               $(".alert").hide();
               $(".selected_item a."+_id).click(function(){
                 $(".selected_item tr."+_id).remove();
+                $(".add-item").prop("disabled", true)
               });
               $(this).val("");
               return false;
@@ -149,5 +159,9 @@ function autoCompleteItem(){
     });
   }); 
 }
-  autoCompleteItem();
+// $(document).ready(function)
+
+// };
+autoCompleteItem();
+
 </script>

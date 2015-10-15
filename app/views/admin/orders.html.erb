@@ -18,7 +18,7 @@
       <% @order.each_with_index do |o, index| %>
         <tr>
           <td><%= index+1 %></td>
-          <td><%= o.id %></td>
+          <td><%= link_to "#{o.id}", your_order_path(o.id)%></td>
           <td><%= o.table.name unless o.table.nil? %></td>
           <% if o.status.eql? "paid" %>
           <td><input type="checkbox" data-id="<%= o.id %>" class="<%= o.id %> status-order" checked data-toggle="toggle" data-on="Paid" data-off="Unpaid"></td>

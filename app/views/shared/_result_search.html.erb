@@ -4,28 +4,14 @@
       <table class="table table-striped">
         <thead>
           <tr>
+            <th>No</th>
             <th>Items</th>
             <th>Quantity</th>
+            <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody class="selected_item">
-        <% if params[:action].eql? "edit" %>
-          <% @line_item.line_items.each do |@o| %>
-          <tr class="<%= o.item_id %>">
-            <input name="line_items[<%= o.item_id %>][order_id]" type="hidden" value="<%=o.order_id%>">
-            <td><input type="hidden" name="line_items[<%= o.item_id %>][item_id]" value="<%=o.item_id%>"><%=o.item.name%></td>
-            <td><input name="line_items[<%= o.item_id %>][quantity]" type="number" value="<%=o.quantity%>" required></td>
-            <td><a href="#" class="btn btn-warning <%= o.item_id %>">X</a></td>
-          </tr>
-          <% end %>
-          <!-- <tr class="5">
-          <input name="line_items[5][order_id]" type="hidden" value="<%#= @line_item.order_id %>">
-          <td><input type="hidden" name="line_items[5][item_id]" value="5">Jus Apel</td>
-          <td><input name="line_items[5][quantity]" type="number" required=""></td>
-          <td><a href="#" class="btn btn-warning 5">X</a></td>
-          </tr> -->
-        <% end %>
 
         </tbody>
       </table>
