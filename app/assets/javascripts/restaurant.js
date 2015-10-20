@@ -176,10 +176,13 @@ function statusOrder(){
 }
 
 
+  
 $(document).ready(function(){
-  if ($(".selected tr").hasClass("append") == false) {
-      $(".add-item").prop("disabled", true)
-  };
+  if ($(".selected_item tr").hasClass("append") == true) {
+          $(".add-item").prop("disabled", false)
+      }else{
+        $(".add-item").prop("disabled", true)
+      };
   statusItem();
   statusOrder();
     // autoCompleteItem();

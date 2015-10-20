@@ -34,11 +34,17 @@ class LineItemsController < ApplicationController
       end
     end
 
-    if counting > 0 
-      # redirect_to your_order
-      redirect_to orders_path
+    if counting > 0
+      order_id = []
+      params[:line_items].each do |key|
+        order_id << key[0]
+      end
+
+      new_order_id = order_id[0]
+      redirect_to your_order_path(params[:line_items][new_order_id][:order_id])
+      # redirect_to order_unpaid_without_table_path
     else
-      redirect_to :back
+      redirect_to orders_path
     end
   end
 

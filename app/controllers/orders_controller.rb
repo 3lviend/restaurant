@@ -45,8 +45,8 @@ class OrdersController < ApplicationController
   def update_status_order
     @order = Order.update(params[:id], status: params[:status_order])
     # debugger
-    table = Table.find(@order.table_id)
-    table.update(available:true)
+      table = Table.find(@order.table_id) unless table.nil?
+      table.update(available:true) unless table.nil?
     render json: @order
   end
 
