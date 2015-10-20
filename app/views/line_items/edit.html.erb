@@ -4,7 +4,6 @@
   </div>
 </div>
 <%= render "shared/search_form" %>
-<%#= render "shared/result_search" %>
 <div class="row">
   <div class="col-md-12 cs-col">
     <%= form_tag('/line_items') %>
@@ -30,10 +29,10 @@
               <td><a href="#" class="btn btn-warning disabled">X</a></td>
             <% else %>
               <!-- <td><input name="line_items[<%#=line_item.item_id%>][quantity]" type="number" required><%#= line_item.quantity %></td> -->
-              <td><input class="form-control" style="width:48%;float: left" type="number" disabled value="<%= line_item.quantity %>">
+              <td class="status"><input class="form-control" style="width:48%;float: left" type="number" disabled value="<%= line_item.quantity %>">
               <%= link_to "Edit quantity", edit_quantity_line_items_path(line_item), 'data-no-turbolink' => true, class: "btn btn-info form-control", style:"width:48%;float:right"%>
               </td>
-              <td><span class="badge badge-red">Uncomplete</span></td>
+              <td class="status"><span class="badge badge-red">Uncomplete</span></td>
               <td> <%= link_to "X", line_item, method: :delete, data:{confirm: "Are You Sure"}, class: "btn btn-warning " %></td>
             <% end %>
          </tr>
@@ -62,7 +61,8 @@ function autoCompleteItem(){
                 data: {term: request.term},
                 dataType: "json",
                   success: function( data ) {
-                    response( $.map( data, function( v ) {
+                    response( $.map( data.items, function( v ) {
+              // console.log(data.items.id);
                       return {
                         id: v.id,
                         label: v.name,
@@ -76,7 +76,7 @@ function autoCompleteItem(){
                     }));
                   }
               });
-              // console.log($.ajax);
+                  // console.log($.ajax.response)
       },
 
       focus: function (event, ui) {
@@ -119,28 +119,60 @@ function autoCompleteItem(){
               $(this).val("");
               return false;
 
-            }else if ($(".selected_item tr").hasClass(_id) == true ) {
+            }else if ( ($(".selected_item tr").hasClass(_id) == true && $(".selected_item tr."+_id+" td.status span").text() == "Uncomplete") || ($(".selected_item tr").hasClass(_id) == true && $(".selected_item tr."+_id+" td.status span").text() == "New Item")  ) {
+              
                 
               $(".alert").show().html("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please fill the quantity for reserve <strong>"+_name+"</strong> again");
               $(this).val("");
               return false;
              
-            }else{
-              var no = $(".selected_item tr").length
+            }
+            else if($(".selected_item tr").hasClass(_id) == true && $(".selected_item tr."+_id+" td.status span").text() == "Complete" ){
+               var no = $(".selected_item tr").length
               no+=1;
               $(".selected_item").append("<tr class='append "+_id+"'>"+
                                         "<input name='line_items["+_id +"][order_id]' type='hidden' value='<%= @order.id %>' >"+
                                         "<td>"+ no +"</td>"+
                                         "<td ><input type='hidden' name='line_items["+_id+"][item_id]' value='"+_id+"' >"+_name + "</td>"+
-                                        "<td><input name='line_items["+_id+"][quantity]' type='number' class='form-control input-group cs' required><span class='input-group-addon cs'>Orang</span></td>"+
-                                        "<td><span class='badge badge-info' style='margin-top: 6px;'>New Item</span></td>"+
+                                        "<td><input name='line_items["+_id+"][quantity]' type='number' class='form-control input-group cs' required min='1'></td>"+
+                                        "<td class='status'><span class='badge badge-info' style='margin-top: 6px;'>New Item</span></td>"+
                                         "<td><a href='#' class='btn btn-warning "+_id+"' >X</a></td>"+
                                         "</tr>");
               $(".add-item").prop("disabled", false)
               $(".alert").hide();
               $(".selected_item a."+_id).click(function(){
                 $(".selected_item tr."+_id).remove();
-                $(".add-item").prop("disabled", true)
+                if ($(".selected_item tr").hasClass("append") == true) {
+                    $(".add-item").prop("disabled", false)
+                }else{
+                  $(".add-item").prop("disabled", true)
+                };
+              });
+              $(this).val("");
+              return false;
+
+            }
+            else{
+              // console.log($(".selected_item tr."+_id+" td.status span").text())
+              var no = $(".selected_item tr").length
+              no+=1;
+              $(".selected_item").append("<tr class='append "+_id+"'>"+
+                                        "<input name='line_items["+_id +"][order_id]' type='hidden' value='<%= @order.id %>' >"+
+                                        "<td>"+ no +"</td>"+
+                                        "<td ><input type='hidden' name='line_items["+_id+"][item_id]' value='"+_id+"' >"+_name + "</td>"+
+                                        "<td><input name='line_items["+_id+"][quantity]' type='number' class='form-control input-group cs' required min='1'></td>"+
+                                        "<td class='status'><span class='badge badge-info' style='margin-top: 6px;'>New Item</span></td>"+
+                                        "<td><a href='#' class='btn btn-warning "+_id+"' >X</a></td>"+
+                                        "</tr>");
+              $(".add-item").prop("disabled", false)
+              $(".alert").hide();
+              $(".selected_item a."+_id).click(function(){
+                $(".selected_item tr.append."+_id).remove();
+                if ($(".selected_item tr").hasClass("append") == true) {
+                    $(".add-item").prop("disabled", false)
+                }else{
+                  $(".add-item").prop("disabled", true)
+                };
               });
               $(this).val("");
               return false;
