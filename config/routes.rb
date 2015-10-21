@@ -83,6 +83,9 @@ Rails.application.routes.draw do
     resources :orders
     get 'order_without_table' => 'orders#order_without_table'
     get 'order_without_table/:id' => 'orders#show_detail_order_without_table'
+    get 'order_with_table' => 'orders#order_with_table'
+    get 'order_with_table/:id' => 'orders#show_detail_order_with_table'
+    resources :items
   end
   
 end
