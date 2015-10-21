@@ -79,8 +79,8 @@ Rails.application.routes.draw do
     # match '/sessions' => 'sessions#create', via: [:post, :options ]
     resources :sessions, only:[:create, :delete]
     resources :orders
-    get 'order_unpaid_without_table' => 'orders#order_unpaid_without_table'
-    get 'order_unpaid_without_table/:id' => 'orders#show_detail_order_unpaid_without_table'
+    get 'order_without_table' => 'orders#order_without_table'
+    get 'order_without_table/:id' => 'orders#show_detail_order_without_table'
   end
   
 end
