@@ -7,7 +7,6 @@
             <th>No</th>
             <th>Items</th>
             <th>Quantity</th>
-            <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -15,10 +14,18 @@
 
         </tbody>
       </table>
-      <input type="submit" class="btn btn-primary" value="Save" >
+      <input type="submit" class="save-order btn btn-primary" value="Save" >
   </div>
 </div>
 <script>
+function disableSave(){
+  if  ($(".selected_item tr").length == 0){
+      $(".save-order").addClass("disabled")
+  }else{
+      $(".save-order").removeClass("disabled")
+  }
+}
+  
 function autoCompleteItem(){
   $(function() {
     $( "#searchItems" ).autocomplete({
@@ -72,14 +79,7 @@ function autoCompleteItem(){
             var _id = ui.item.id
             var _name = ui.item.value
             var _available = ui.item.available
-            // function clearText(this_item){
-            //   if (this_item.val()!= ""){
-            //     this_item.val("");
-            //   return false;
-            //   }
-            // }
-            // console.log($(this).val(""));
-            
+
             if (_available == false){
 
               $(".alert").show().html("<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button><strong>Sorry,</strong> to now <strong>"+_name+"</strong> is Not Available");
@@ -93,26 +93,30 @@ function autoCompleteItem(){
               return false;
              
             }else{
+                var no = $(".selected_item tr").length
+                no += 1
                 $(".selected_item").append("<tr class='"+_id+"'>"+
                                         "<input name='line_items["+_id +"][order_id]' type='hidden' value='<%= @line_item.order_id %>' >"+
+                                        "<td>"+no+"</td>"+
                                         "<td><input type='hidden' name='line_items["+_id+"][item_id]' value='"+_id+"' >"+_name + "</td>"+
-                                        "<td><input name='line_items["+_id+"][quantity]' type='number' required></td>"+
+                                        "<td><input name='line_items["+_id+"][quantity]' type='number' required min='1'></td>"+
                                         "<td><a href='#' class='btn btn-warning "+_id+"' >X</a></td>"+
                                         "</tr>");
-              $(".alert").hide();
-
-              $(".selected_item a."+_id).click(function(){
-                $(".selected_item tr."+_id).remove();
-              });
-
-              <% if params[:action].eql? "edit" %>
-                $(".selected_item a."<%=params[:id]%>).click(function(){
-                  $(".selected_item tr."<%=params[:id]%>).remove();
+                $(".alert").hide();
+                  disableSave()
+                $(".selected_item a."+_id).click(function(){
+                  $(".selected_item tr."+_id).remove();
+                  disableSave()
                 });
-              <% end %> 
 
-              $(this).val("");
-              return false;
+                <% if params[:action].eql? "edit" %>
+                  $(".selected_item a."<%=params[:id]%>).click(function(){
+                    $(".selected_item tr."<%=params[:id]%>).remove();
+                  });
+                <% end %> 
+
+                $(this).val("");
+                return false;
             }
       },
 
@@ -128,5 +132,9 @@ function autoCompleteItem(){
     });
   }); 
 }
-  autoCompleteItem();
+$(document).ready(function(){
+
+disableSave()
+autoCompleteItem();
+})
 </script>
