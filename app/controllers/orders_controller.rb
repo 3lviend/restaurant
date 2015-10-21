@@ -6,7 +6,6 @@ class OrdersController < ApplicationController
 
   def index
     @table = Table.all
-    # rescue "as"
   end
 
 
@@ -44,7 +43,6 @@ class OrdersController < ApplicationController
   
   def update_status_order
     @order = Order.update(params[:id], status: params[:status_order])
-    # debugger
       table = Table.find(@order.table_id) unless table.nil?
       table.update(available:true) unless table.nil?
     render json: @order
@@ -64,18 +62,7 @@ class OrdersController < ApplicationController
 
   
   def your_order
-    # order_table_unpaid = Order.includes(:table, :line_items).where("orders.status = 'unpaid' and orders.table_id is not null").order("orders.table_id ASC")
-    # order_table_unpaid = Order.includes(:table, :line_items).where("orders.table_id is not null").order("orders.table_id ASC")
-    # raise "#{order_table_unpaid.table.empty?}"
-    # if order_table_unpaid.table.blank?
-
-      @your_order = Order.find(params[:id])
-    # else  
-    #   @your_order = order_table_unpaid.find(params[:id]) 
-    # end
-    # if @your_order.nil?
-    #    puts "nil"
-    # end
+    @your_order = Order.find(params[:id])
   end
 
 
@@ -84,10 +71,6 @@ class OrdersController < ApplicationController
 
     def set_order
       @order = Order.find(params[:id])
-    end
-
-    def set_table
-      # @table = Table.find(params[:id])
     end
 
     def order_params

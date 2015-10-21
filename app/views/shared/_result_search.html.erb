@@ -93,23 +93,12 @@ function autoCompleteItem(){
               return false;
              
             }else{
-              <% if params[:action].eql? "new" %>
                 $(".selected_item").append("<tr class='"+_id+"'>"+
                                         "<input name='line_items["+_id +"][order_id]' type='hidden' value='<%= @line_item.order_id %>' >"+
                                         "<td><input type='hidden' name='line_items["+_id+"][item_id]' value='"+_id+"' >"+_name + "</td>"+
                                         "<td><input name='line_items["+_id+"][quantity]' type='number' required></td>"+
                                         "<td><a href='#' class='btn btn-warning "+_id+"' >X</a></td>"+
                                         "</tr>");
-              <% else %>
-                $(".selected_item").append("<tr class='"+_id+"'>"+
-                                        "<input name='line_items["+_id +"][order_id]' type='hidden' value='<%= @line_item.id %>' >"+
-                                        "<td><input type='hidden' name='line_items["+_id+"][item_id]' value='"+_id+"' >"+_name + "</td>"+
-                                        "<td><input name='line_items["+_id+"][quantity]' type='number' required></td>"+
-                                        "<td><a href='#' class='btn btn-warning "+_id+"' >X</a></td>"+
-                                        "</tr>");
-              <% end %>
-              // <%#= @line_item.id %>
-              // <%#= @line_item.status %>
               $(".alert").hide();
 
               $(".selected_item a."+_id).click(function(){
