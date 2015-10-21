@@ -9,9 +9,9 @@
     <% end %>
 </li>
 <li>
-    <%= link_to "#" do %>
-      <i class="fa fa-table fa-fw"></i> Reports
-    <% end %>
+    <%= link_to admin_reports_path, "data-no-turbolink"=> true do %>
+    <i class="fa fa-table fa-fw"></i> Reports
+    <%end%>
 </li>
 <li>
     <%= link_to warning_orders_path do %>

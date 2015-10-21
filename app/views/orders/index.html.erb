@@ -8,16 +8,20 @@
   <% @table.each do |t| %>
     <div class="col-md-3">
       <% if t.available.eql? false %>
-        <div class="table-all btn btn-danger ">
-        <% unless t.orders.last.blank? %>
-          <h5><b><%= link_to "#{t.name} (Not Ready)", your_order_path(t.orders.last.id), "data-no-turbolink" => true %></b></h5>
-          <%end%>
-        </div>
-      <% else %>
-        <div class="table-all btn btn-info">
-          <h5><b><%= link_to "#{t.name}", new_order_table_line_items_path(t), "data-no-turbolink" => true%></b></h5>
-        </div>
-      <% end %>
+        <%= link_to your_order_path(t.orders.last.id), "data-no-turbolink" => true do %>
+          <div class="table-all btn btn-danger ">
+            <% unless t.orders.last.blank? %>
+              <h5><b><%= t.name %>&nbsp;(Not Ready)</b></h5>
+            <% end %>
+          </div>
+          <% end %>
+        <% else %>
+          <%= link_to new_order_table_line_items_path(t), "data-no-turbolink" => true do %>
+            <div class="table-all btn btn-info">
+              <h5><b><%= t.name %></b></h5>
+            </div>
+            <% end %>
+        <% end %>
     </div>
   <% end %>
 <% end %>

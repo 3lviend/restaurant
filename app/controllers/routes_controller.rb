@@ -1,8 +1,5 @@
 class RoutesController < ActionController::Base
-  
-
   before_filter :authenticate_user!
-  # 
 
   def root
     puts current_user.role

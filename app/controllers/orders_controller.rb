@@ -1,5 +1,4 @@
 class OrdersController < ApplicationController
-  # autocomplete :item, :name, :full => true
 
   before_action :set_order, only:[:edit, :update, :destroy, :show]
   before_action :authenticate_user!, except:[:table_order_unpaid, :your_order]
@@ -40,11 +39,12 @@ class OrdersController < ApplicationController
   def get_update_paid
     @paid = Order.find(params[:id])
   end
-  
+
   def update_status_order
     @order = Order.update(params[:id], status: params[:status_order])
-      table = Table.find(@order.table_id) unless table.nil?
-      table.update(available:true) unless table.nil?
+    unless @order.table_id.nil?
+      @order.table.update(available: true)
+    end
     render json: @order
   end
 
@@ -53,7 +53,7 @@ class OrdersController < ApplicationController
   end
 
   def order_unpaid_without_table
-    @order_unpaid_without_table = Order.includes(:table, :line_items).where("orders.status = 'unpaid' and orders.table_id is null").order("orders.table_id ASC")
+    # @order_unpaid_without_table = Order.includes(:table, :line_items).where("orders.status = 'unpaid' and orders.table_id is null").order("orders.table_id ASC")
   end
 
   def table_order_unpaid
