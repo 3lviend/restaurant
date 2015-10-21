@@ -12,22 +12,46 @@
         <th>Order Id</th>
         <th>Table</th>
         <th>Status</th>
+        <th>Detail</th>
       </tr>
     </thead>
     <tbody>
       <% @order.each_with_index do |o, index| %>
         <tr>
           <td><%= index+1 %></td>
-          <td><%= link_to "#{o.id}", your_order_path(o.id)%></td>
-          <td><%= o.table.name unless o.table.nil? %></td>
-          <% if o.status.eql? "paid" %>
-          <td><input type="checkbox" data-id="<%= o.id %>" class="<%= o.id %> status-order" checked data-toggle="toggle" data-on="Paid" data-off="Unpaid"></td>
+          <td><%= o.id %></td>
+          <% if o.table.nil? %>
+            <td>No Table</td>
           <% else %>
-          <td><input type="checkbox" data-id="<%= o.id %>" class="<%= o.id %> status-order" data-toggle="toggle" data-on="Paid" data-off="Unpaid"></td>
+            <td><%= o.table.name %></td>
           <% end %>
+          <% if o.status.eql? "paid" %>
+          <td><input type="checkbox" data-id="<%= o.id %>" class="<%= o.id %> status-order" checked data-toggle="toggle" data-on="Paid" data-off="Unpaid">
+            <span class="btn btn-lock"><i class="fa fa-lock"></i></span>
+          </td>
+          <% else %>
+          <td>
+          <input type="checkbox" data-id="<%= o.id %>" class="<%= o.id %> status-order" data-toggle="toggle" data-on="Paid" data-off="Unpaid">
+            <span class="btn btn-lock"><i class="fa fa-unlock"></i></span>
+          </td>
+          <% end %>
+          <td><%= link_to "Detail Order", your_order_path(o.id), class: "btn btn-primary" %><td>
         </tr>
       <%end%>
     </tbody>
   </table>
 </div>
 <%= render "shared/loading_modal" %>
+<script>
+  $(".btn-lock").click(function(){
+    if ($(this+"i").hasClass("fa-lock") == true )  {
+      console.log("as")
+        $(this+"i").removeClass("fa-lock")
+        $(this+"i").addClass("fa-unlock")
+    }else{
+        $(this+"i").removeClass("fa-unlock")
+        $(this+"i").addClass("fa-lock")
+    };
+  });
+
+</script>

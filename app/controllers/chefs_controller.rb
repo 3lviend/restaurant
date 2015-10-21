@@ -17,7 +17,7 @@ class ChefsController < ApplicationController
 
   def create 
     role_c = Role.find_by_name(:chef)
-    params[:user][:role_id] = role_c
+    params[:user][:role_id] = role_c.id
     @chef = User.new(chef_params)
     if @chef.save
       redirect_to admin_chefs_path

@@ -4,14 +4,9 @@ class WaitressController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    # @role_w = Role.where(:name => "waitress").first
     @role_w = Role.find_by_name("waitress")
     @waitress = @role_w.users
-    # @waitress = User.where(:role => "waitress")
-    # @waitress = User.where(:role_id => 2)
-    # @waitress = Role.where(:name => "waitress")
-    # @waitress = Role.where(:name => "waitress")
-    # user = User.all
+
   end
 
   def new
@@ -20,7 +15,7 @@ class WaitressController < ApplicationController
   
   def create
     role_w = Role.find_by_name "waitress"
-    params[:user][:role_] = role_w 
+    params[:user][:role_id] = role_w.id
     @waitress = User.new(waitress_params)
     if @waitress.save
       redirect_to waitress_index_path

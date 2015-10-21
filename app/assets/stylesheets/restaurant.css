@@ -102,6 +102,9 @@ font-size: 13pt;
 .table-all h5 a {
   color: #fff;
 }
+.cs-form-control{
+  margin-top: 4px;
+}
 
 /*AutoComplete*/
 .ui-autocomplete {
@@ -163,8 +166,12 @@ font-size: 13pt;
   padding-bottom: 9px;
   z-index: 1000;
 }
-.form-control.input-group.cs{
-/*  width: 32.4%;
-  border-top-right-radius: 0px !important;
-  border-bottom-right-radius: 0px;*/
+
+@media(min-width: 200px) and (max-width: 991px){
+  input.form-control.cs-form-control.btn.btn-primary.pst{
+    margin:0px;
+  }
+  label.cs-label{
+    display: none;
+  }
 }

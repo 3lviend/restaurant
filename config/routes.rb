@@ -17,7 +17,9 @@ Rails.application.routes.draw do
   # get 'admin/tables' => 'tables#index'
   get 'admin/chefs' => 'chefs#all_chef'
   # get 'admin/waitress' => 'waitress#index'
-  
+
+  get 'admin/reports' => 'admin#reports'
+
   ## resources
 
   # Customer

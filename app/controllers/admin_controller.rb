@@ -8,31 +8,18 @@ before_action :authenticate_user!
   end
 
   def orders
-    # rescue "as"
     @order = Order.all.order("id DESC")
-
   end
-
-  # def get_update_paid
-  #   @paid = Order.find(params[:id])
-  # end
   
-  # def update_paid
-  #   @paid = Order.find(params[:id])
-  #   unless @paid.table.blank?
-  #     table = @paid.table.update(:available => true)
-  #   end
-  #   if @paid.update(params_order)
-  #     redirect_to admin_orders_path
-  #   else
-  #     redirect_to :back
-  #   end
-  # end
+  def reports
+    @reports = Order.search(params[:search])
+  end
 
   private
 
   def params_order
     params.require(:order).permit(:status)
   end
+
 
 end

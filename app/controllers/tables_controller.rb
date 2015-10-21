@@ -39,9 +39,7 @@ class TablesController < ApplicationController
     end
   end
 
-  def show
-    # @table 
-  end
+  def show;end
 
 
   private

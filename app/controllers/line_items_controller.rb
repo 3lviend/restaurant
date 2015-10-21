@@ -42,7 +42,6 @@ class LineItemsController < ApplicationController
 
       new_order_id = order_id[0]
       redirect_to your_order_path(params[:line_items][new_order_id][:order_id])
-      # redirect_to order_unpaid_without_table_path
     else
       redirect_to orders_path
     end
@@ -85,14 +84,4 @@ class LineItemsController < ApplicationController
     def edit_quantity_params
       params.require(:line_item).permit(:quantity, :item_id, :order_id)
     end
-  # {"utf8"=>"✓", "authenticity_token"=>"jOUW9ZHNlo+LlRg1zgX6eRCnE40owAIgMWOaYxp3OOWaDCrh4oBYDCFab1olmOvEGzVludAmX//oojMc3d1haA==",
-  # "line_items"=>
-  # {
-  # "2"=>{"order_id"=>"<%= @line_item.order_id %>", "item_id"=>"2", "quantity"=>"2"},
-  # "4"=>{"order_id"=>"<%= @line_item.order_id %>", "item_id"=>"4", "quantity"=>"2"},
-  # "6"=>{"order_id"=>"<%= @line_item.order_id %>", "item_id"=>"6", "quantity"=>"2"}
-  # },
-  # "controller"=>"line_items", "action"=>"create"}
-
-
 end
