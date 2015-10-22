@@ -86,6 +86,7 @@ Rails.application.routes.draw do
     get 'order_with_table' => 'orders#order_with_table'
     get 'order_with_table/:id' => 'orders#show_detail_order_with_table'
     resources :items
+    match '/items/:id' => 'items#update', via: [:put, :options ]
   end
   
 end

@@ -12,10 +12,6 @@ module Api
 	  	render json: @item
 	  end
 
-	  # def new
-	  #   @item = Item.new
-	  # end
-
 	  # def create
 	  #   @item = Item.new(item_params)
 	  #   if @item.save
@@ -25,25 +21,15 @@ module Api
 	  #   end
 	  # end
 
-	  # def edit;end
-
-	  # def update
-	  #   if @item.update(item_params)
-	  #      redirect_to items_path
-	  #   else
-	  #     render new_item_path
-	  #   end
-	  # end
+	  def update
+	    # debugger
+	    render json: {status:true}, status: 200
+	  end
 
 	  # def destroy
 	  #   if @item.destroy
 	  #     redirect_to items_path
 	  #   end
-	  # end
-
-	  # def search_item
-	  #   @items = Item.where("name like ?", "%#{params[:term]}%")
-	  #   render  json: @items
 	  # end
 
 	  # private
