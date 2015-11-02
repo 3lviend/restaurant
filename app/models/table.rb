@@ -8,10 +8,12 @@ class Table < ActiveRecord::Base
 
   #  for api
   def status
-  	if self.available == true
-  		available = 'available'
-  	else 
-  		available = 'not available'
-  	end
+    return "available" if self.available == true
+    return "not available"
+  	# if self.available == true
+  	# 	available = 'available'
+  	# else 
+  	# 	available = 'not available'
+  	# end
   end
 end

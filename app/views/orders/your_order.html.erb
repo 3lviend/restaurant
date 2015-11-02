@@ -3,13 +3,23 @@
     <div class="col-md-12">
       <div class="panel panel-primary">
         <div class="panel-heading">
-            <div class="pull-right">
-              <% if u.status.eql? "paid" %>
-                <input type="checkbox" checked data-id="<%= u.id %>" class="<%= u.id %> status-order" checked data-toggle="toggle" data-on="Paid" data-off="Unpaid" data-onstyle="info" data-on="<i class='fa fa-table fa-fw'></i>" >
-              <% else %>
-                <input type="checkbox" data-id="<%= u.id %>" class="<%= u.id %> status-order" data-toggle="toggle" data-on="Paid" data-off="Unpaid" data-onstyle="info">
-              <% end %>
-            </div>
+          <% if (user_signed_in? and current_user.role.name.eql? 'admin') or (user_signed_in? and current_user.role.name.eql? 'waitress')%>
+              <div class="pull-right">
+                <% if u.status.eql? "paid" %>
+                <div class="checkbox disabled">
+                  <label>
+                    <input type="checkbox" disabled checked data-id="<%= u.id %>" class="<%= u.id %> paid status-order"  data-toggle="toggle" data-on="Paid" data-off="Unpaid" data-onstyle="info" data-on="<i class='fa fa-table fa-fw'></i>" >
+                  </label>
+                </div>
+                <% else %>
+                <div class="checkbox disabled">
+                  <label>
+                    <input type="checkbox" disabled data-id="<%= u.id %>" class="<%= u.id %> unpaid status-order" data-toggle="toggle" data-on="Paid" data-off="Unpaid" data-onstyle="info">
+                  </label>
+                </div>
+                <% end %>
+              </div>
+          <% end %>
             
             <h4>
             <% if u.table.nil? %>
@@ -21,53 +31,270 @@
             </h4>
 
         </div>
-          <div class="panel-body">
-               <table class="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Items</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Sum Price</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-                <% sum_price = 0 %>
-                <% total_price = 0 %>
-                <% u.line_items.each_with_index do |li, i|%>
-                  <tr>
-                    <td><%= i+1%></td>
-                    <td><%= li.item.name unless li.item.nil? %></td>
-                    <td><%= li.quantity unless li.item.nil? %></td>
-                    <td><%= number_to_currency(li.item.price, unit: "Rp. ") unless li.item.nil? %></td>
-                    <td><%= number_to_currency(li.quantity * li.item.price, unit: "Rp. ") unless li.item.nil?%></td>
-                    <% if li.complete.eql? true %>
-                      <td><span class="badge badge-green">Complete</span></td>
-                    <% else %>
-                      <td><span class="badge badge-red">Uncomplete</span></td>
-                      <% end %>
-                  </tr>
-                  <% sum_price = (li.quantity * li.item.price) unless li.item.nil? %>
-                  <% total_price = total_price + sum_price %>
-                <% end %>
+        <div class="panel-body">
+            <table class="table table-striped table-hover">
+              <thead>
                 <tr>
-                
-                 <td colspan="4" align="right"><h4><strong> Total :</strong></h4></td>
-                 <td colspan="2"align="left"><h4><strong> <%= number_to_currency(total_price, unit: "Rp. ") %></strong></h4></td>
+                  <th>No</th>
+                  <th>Items</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Sum Price</th>
+                  <th>Status</th>
                 </tr>
-                
-            </tbody>
-          </table>  
-              <%= link_to edit_line_item_path, class: "btn btn-primary", "data-no-turbolink" => true do %>
-                  <i class="fa fa-edit fw"></i> Update This Order
+              </thead>
+              <tbody>
+                  <% sum_price = 0 %>
+                  <% total_price = 0 %>
+                  <% u.line_items.each_with_index do |li, i|%>
+                    <tr>
+                      <td><%= i+1%></td>
+                      <td><%= li.item.name unless li.item.nil? %></td>
+                      <td><%= li.quantity unless li.item.nil? %></td>
+                      <td><%= number_to_currency(li.item.price, unit: "Rp. ") unless li.item.nil? %></td>
+                      <td><%= number_to_currency(li.quantity * li.item.price, unit: "Rp. ") unless li.item.nil?%></td>
+                      <% if li.complete.eql? true %>
+                        <td><span class="badge badge-green">Complete</span></td>
+                      <% else %>
+                        <td><span class="badge badge-red">Uncomplete</span></td>
+                        <% end %>
+                    </tr>
+                    <% sum_price = (li.quantity * li.item.price) unless li.item.nil? %>
+                    <% total_price = total_price + sum_price %>
+                  <% end %>
+
+              </tbody>
+          </table>
+            <% if (user_signed_in? and current_user.role.name.eql? 'admin') or (user_signed_in? and current_user.role.name.eql? 'waitress')%>
+              <div class="row">
+                <div class="col-md-8 col-md-offset-2 ">
+                  
+                  <div class="col-md-6">
+                    <h4>Payment Methods</h4>
+                    <%
+                      cash = PaymentMethod.find_by_payment_type("cash").id
+                      debit = PaymentMethod.find_by_payment_type("debit_card").id
+                      credit = PaymentMethod.find_by_payment_type("credit_card").id
+                    %>
+                    <!-- edit -->
+
+                      <% if u.payment.payment_method.nil? %>
+                        <form name='payment_method'>
+                          
+                          <input data-id="<%= params[:id] %>" price="<%= total_price %>" type="radio" name="payment_method" for="cash" value='<%= cash %>' required> Cash<br>
+                          <input data-id="<%= params[:id] %>" price="<%= total_price %>" type="radio" name="payment_method" for="debit_card" value='<%= debit %>' required> Debit Card<br>
+                          <input data-id="<%= params[:id] %>" price="<%= total_price %>" type="radio" name="payment_method" for="credit_card" value='<%= credit %>' required> Credit Card
+                         
+                            <input class="number_card hide" data-id="<%= params[:id] %>"  type="number" min="0" placeholder="" required><br>
+                            <button type='submit' name="payment_method" class="btn btn-primary">Submit</button>
+                            
+                          <!-- </form> -->
+                        </form>
+
+                      <% else %>
+
+                        <% if u.payment.payment_method.payment_type.eql? "cash" %>
+                          <input checked type="radio" price="<%= total_price %>"> Cash<br>
+                          <!-- <br><p>.eql?cash</p> -->
+                        <% elsif u.payment.payment_method.payment_type.eql? "debit_card" %>
+                          <input checked type="radio" price="<%= total_price %>"> Debit Card<br>
+                          <input class="debit" type="text" min="0" disabled value="<%= u.payment.payment_number %>">
+                          <!-- <br><p>.eql?debit card<%#= u.payment.payment_number %></p> -->
+                        <% elsif u.payment.payment_method.payment_type.eql? "credit_card" %>
+                          <input checked type="radio" price="<%= total_price %>"  > Credit Card<%#= u.payment.payment_number %>
+                          <input class="credit  " type="text" min="0" disabled value="<%= u.payment.payment_number %>"><br>
+                        <% end %>
+                      <% end %>
+
+                    <!--  -->
+                  </div>
+                  <div class="col-md-6">
+                    <table class="table table-striped">
+                      <tr>
+                        <td>Payment Item</td>
+                        <td><%= number_to_currency(total_price, unit: "Rp. ") %></td>
+                      </tr>
+                      <% if u.payment.payment_method.nil? %>
+                        <tr>
+                          <td>Pajak</td>
+                          <td class="pajak"></td>
+                        </tr>
+                        <tr>
+                          <td>Service</td>
+                          <td class="service"></td>
+                        </tr>
+                        <tr>
+                          <td>Discount</td>
+                          <td class="discount"></td>
+                        </tr>
+                        <tr><%#= number_to_currency(total_price, unit: "Rp. ") %>
+                          <th>Total Payment</th>
+                          <th class="total_payment"></th>
+                        </tr>
+                      <% else %>
+                         <tr>
+                          <td>Pajak</td>
+                          <td><%= Additional.find_by_additional_type("pajak").amount %> %</td>
+                        </tr>
+                        <tr>
+                          <td>Service</td>
+                          <td><%= Additional.find_by_additional_type("service").amount %> %</td>
+                        </tr>
+                        <tr>
+                          <td>Discount</td>
+                          <td><%= u.payment.payment_method.discount%> %</td>
+                        </tr>
+                        <tr><%#= number_to_currency(total_price, unit: "Rp. ") %>
+                          <th>Total Payment</th>
+                          <th>Rp.<%= u.total_payment %></th>
+                        </tr>
+                      <% end %>
+                    </table>
+
+                  </div>
+                </div>
+              </div>  <br>
+              <% if u.status.eql? "paid" %>
+                <div class="checkbox disabled">
+                <label>    
+                  <%= link_to edit_line_item_path, class: "btn btn-primary disabled", "data-no-turbolink" => true do %>
+                      <i class="fa fa-edit fw"></i> Update This Order
+                  <% end %>
+                </label>
+                </div>
+              <% else %>
+                  <%= link_to edit_line_item_path, class: "btn btn-primary", "data-no-turbolink" => true do %>
+                      <i class="fa fa-edit fw"></i> Update This Order
+                  <% end %>
               <% end %>
-              <%= link_to "Back", :back, class: "btn btn-warning", "data-no-turbolink" => true %>
-          </div>
-          <div class="panel-footer">
-              Thanks For Order
-          </div>
+
+              
+            <% end %>
+        </div> <!-- PanelBody -->
+        <div class="panel-footer">
+            Thank You For Order
+        </div>
         </div>
 </div>
 <%= render "shared/loading_modal" %>
+
+<script>
+  
+  $("input[type='checkbox'].paid").prop('checked', true).change()
+  $("input[type='checkbox'].unpaid").prop('checked', false).change()
+
+  function statusPayment() {
+  $("input[name='payment_method']").click(function(){
+
+    var _order_id = ($(this).attr("data-id"));
+        _payment_method_id = ($(this).attr("value"));
+        _payment_method = $(this).attr("for")
+        payment_items = parseInt($(this).attr("price"))
+ 
+    if ($(this).is(":checked") == true) {
+
+      if ($(this).attr("for") == "cash"){
+        $(".number_card").removeClass("show")
+        $(".number_card").removeClass("show")
+        $(".number_card").val("")
+        $(".number_card").removeAttr("required")
+        // console.log('cash')
+      }else if ($(this).attr("for") == "debit_card"){
+        $(".number_card").addClass("show")
+        $(".number_card").prop("placeholder", "Debit Card")
+        $(".number_card").val("")
+        $(".number_card").attr('required', 'required')
+        // console.log('debit')
+      }else if ($(this).attr("for") == "credit_card"){
+        $(".number_card").addClass("show")
+        $(".number_card").prop("placeholder", "Credit Card")
+        $(".number_card").attr('required', 'required')
+        // console.log('credit')
+      }
+
+      // for total payment
+      function total_payment(_pajak, _service, _discount, _payment_items){
+        additional = _pajak + _service;
+        cal_additional = (_payment_items * additional)/100;
+        cal_discount = (_payment_items * _discount)/100;
+        
+        total_add = _payment_items + cal_additional;
+        total_all = total_add - cal_discount;
+        return total_all
+      }
+
+      // global vairable for parameter total payment
+      var pajak = 0
+      var service = 0
+
+      var requestAdditional = $.ajax({
+            type: "GET",
+            url: "/get_additional.json",
+            dataType: "json",
+            async: false
+        });
+        requestAdditional.done(function(data){
+          $.each(data.orders, function(index, val) {
+              if (val.additional_type == "pajak" ) {
+                $("td.pajak").text(val.amount+" %")
+                  pajak = val.amount
+              };
+              if (val.additional_type == "service" ) {
+                $("td.service").text(val.amount+" %")
+                 service = val.amount
+              };
+            });
+          });
+        requestAdditional.fail(function(textStatus){
+          alert("Request failed: " + textStatus+" Please Reload")
+        });
+      
+      // global vairable for parameter total payment
+      var discount = 0
+
+      var requestDiscount = $.ajax({
+            type: "GET",
+            url: "/get_payment_discount/"+_payment_method+".json",
+            dataType: "json",
+            async: false // <- this turns it into synchronous
+        });
+        requestDiscount.done(function(data){
+           $("td.discount").text(data+" %")
+           discount = data
+        });
+        requestDiscount.fail(function(textStatus){
+        });
+      $("th.total_payment").text("Rp."+total_payment(pajak, service, discount, payment_items))
+    }
+  });
+  
+  $("form[name='payment_method']").submit(function(e) {
+
+    var _order_id = $("input.number_card").attr("data-id");
+    var _total_payment = $("th.total_payment").text().split("Rp.")[1]
+ 
+      if (($("input[name='payment_method']").is(':checked') == true ) && ($("input[name='payment_method']").is('for') == 'cash')) {
+        var _payment_number = "nil"
+      }
+
+      var request = $.ajax({
+             type: "POST",
+             url: "/update_payment_method/"+_order_id+".json",
+             data: {payment_method_id: _payment_method_id, payment_number: _payment_number, total_payment:_total_payment },
+             dataType: "json"
+          });
+          request.done(function(){
+            alert("success")
+
+          });
+          request.fail(function(textStatus){
+            alert("Request failed: " + textStatus+" Please Reload")
+          });
+  });
+
+}
+
+$(document).ready(function(){
+  statusPayment()
+})
+</script>

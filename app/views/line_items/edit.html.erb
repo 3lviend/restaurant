@@ -57,7 +57,7 @@ function autoCompleteItem(){
       
       source: function( request, response ) {
               $.ajax({
-                url: "http://localhost:3000/search_item.json",
+                url: "/search_item.json",
                 data: {term: request.term},
                 dataType: "json",
                   success: function( data ) {

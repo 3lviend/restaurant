@@ -1,0 +1,42 @@
+  <div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">Discount</h2>
+    </div>
+  </div>
+  <div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Payment Type</th>
+          <th>Discount</th>
+          <th>Status</th>
+          <th colspan="2" class="text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @payment_methods.each do |i| %>
+        <tr>
+          <td><%= i.payment_type %></td>
+          <td><%= i.discount %></td>
+          <td>
+            <%= if i.active.eql? true
+                "<span class=' vcenter label label-success'>Active</span>".html_safe
+              else
+                "<span class=' vcenter label label-warning'>Not Active</span>".html_safe
+              end
+             %>
+          </td>
+          <td><%= link_to 'Edit', edit_payment_method_path(i), 'data-no-turbolink' => true, class: "btn btn-primary"  %></td>
+          <%# if current_user.role.name.eql? "admin" %>
+            <td><%= link_to 'Delete', i, method: :delete, data:{confirm: 'Are You Sure'}, class: 'btn btn-warning' %></td>
+          <%# end %>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%# if current_user.role.name.eql? "admin" %>
+      <%= link_to 'ADD', new_payment_method_path, class: 'btn btn-primary', "data-no-turbolink" => true %>
+    <%# end %>
+    </div>
+  </div>

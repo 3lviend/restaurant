@@ -1,0 +1,32 @@
+<div class="row">
+  <%= form_for @additional do |f| %>
+    <%# if @item.errors.any? %>
+      <!-- <ul class="alert alert-danger" style="margin-top:10px">
+        <%# @item.errors.full_messages.each do |msg| %>
+         <li style="margin-left:10px"><%#= msg %></li>
+        <%# end %>
+      </ul> -->
+    <%# end %>
+      <div class="col-md-4">
+        <%=f.label 'Additional Type' %>
+        <%=f.text_field :additional_type, class: "form-control", placeholder: "Pajak", required:true %>
+        <br>
+            
+          <%= f.label 'Amount'%>
+        <div class="form-group input-group">
+          <%= f.number_field :amount, min: 0.1 , class: "form-control", placeholder: "1", required:true%>
+          <span class="input-group-addon">%</span>
+        </div>
+
+        <%= f.label 'Type' %>
+        <%#= f.select :type_of_item, options_for_select([[ "Makanan","Makanan"],["Minuman","Minuman"] ], :selected => @item.type_of_item),{},class: 'form-control' %>
+        <br>
+
+        <%= f.label 'Status' %>
+        <%= f.select :active, options_for_select([[ "Active","true"],["Not Active","false"] ], :selected => @additional.active),{},class: 'form-control' %>
+      <br>
+      <%= f.submit 'Save', class: 'btn btn-success' %>
+      <%= link_to 'Back', additionals_path, class: "btn btn-default", "data-no-turbolink" => true %>
+    </div>
+    <% end %>
+</div>

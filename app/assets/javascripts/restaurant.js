@@ -6,7 +6,7 @@ function statusItem(){
       // alert("checked")
       var request = $.ajax({
             type: "POST",
-            url: "http://localhost:3000/update_status_item.json",
+            url: "/update_status_item.json",
             data: {id:_id, status_item: true},
             dataType: "json"
       });
@@ -22,7 +22,7 @@ function statusItem(){
         // alert("unchecked")
       var request = $.ajax({
             type: "POST",
-            url: "http://localhost:3000/update_status_item.json",
+            url: "/update_status_item.json",
             data: {id:_id, status_item: false},
             dataType: "json"
       });
@@ -44,7 +44,7 @@ function statusOrder(){
         $("#loader-container").show();
       var request = $.ajax({
             type: "POST",
-            url: "http://localhost:3000/update_status_order.json",
+            url: "/update_status_order.json",
             data: {id:_id, status_order: "paid"},
             dataType: "json",
             // tryCount: 0,
@@ -64,7 +64,7 @@ function statusOrder(){
           $("#loader-container").hide();
 
           $(_btn).bootstrapToggle('off');
-          $(_btn).bootstrapToggle('disable');
+          // $(_btn).bootstrapToggle('disable');
 
           $(".modal-order").click();
           $(".modal-content").html("<div class='text-center'>"+
@@ -75,7 +75,7 @@ function statusOrder(){
       $("#loader-container").show();
       var request = $.ajax({
             type: "POST",
-            url: "http://localhost:3000/update_status_order.json",
+            url: "/update_status_order.json",
             data: {id:_id, status_order: "unpaid"},
             dataType: "json"
       });
@@ -92,19 +92,17 @@ function statusOrder(){
           $("#loader-container").hide();
           $(".modal-order").click();
           $(".modal-content").html("<div class='text-center'>"+
-                                    "<strong>Failed ! , changed to Unpaid this order, please try again<strong></div>");
+                                    "<strong>Failed ! , changed to Unpaid this order, please reload the page<strong></div>");
         }, 1000);
         setTimeout(function(){
           $(_btn).bootstrapToggle('on');
-          $(_btn).bootstrapToggle('disable');
+          // $(_btn).bootstrapToggle('disable');
         }, 2000)
       });
     }
   });
 }
 
-
-  
 $(document).ready(function(){
   if ($(".selected_item tr").hasClass("append") == true) {
     $(".add-item").prop("disabled", false)

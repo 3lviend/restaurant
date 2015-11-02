@@ -43,6 +43,7 @@ class ChefsController < ApplicationController
   
   def update_status_item
     @items = LineItem.update(params[:id], complete: params[:status_item])
+    debugger
       render json: @items
   end
 

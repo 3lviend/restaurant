@@ -26,16 +26,16 @@
             <td><%= o.table.name %></td>
           <% end %>
           <% if o.status.eql? "paid" %>
-          <td><input type="checkbox" data-id="<%= o.id %>" class="<%= o.id %> status-order" checked data-toggle="toggle" data-on="Paid" data-off="Unpaid">
-            <span class="btn btn-lock"><i class="fa fa-lock"></i></span>
-          </td>
+              <td><input type="checkbox" data-toggle="toggle" data-on="Paid" data-off="Unpaid" checked data-id="<%= o.id %>" class="<%= o.id %> status-order paid"  >
+                <!-- <span class="btn btn-lock"><i class="fa fa-lock"></i></span> -->
+              </td>
           <% else %>
-          <td>
-          <input type="checkbox" data-id="<%= o.id %>" class="<%= o.id %> status-order" data-toggle="toggle" data-on="Paid" data-off="Unpaid">
-            <span class="btn btn-lock"><i class="fa fa-unlock"></i></span>
-          </td>
+              <td>
+              <input type="checkbox" data-toggle="toggle" data-on="Paid" data-off="Unpaid"  data-id="<%= o.id %>" class="<%= o.id %> status-order unpaid" >
+                <!-- <span class="btn btn-lock"><i class="fa fa-unlock"></i></span> -->
+              </td>
           <% end %>
-          <td><%= link_to "Detail Order", your_order_path(o.id), class: "btn btn-primary" %><td>
+          <td><%= link_to "Detail Order", your_order_path(o.id), class: "btn btn-primary", "data-no-turbolink" => true %><td>
         </tr>
       <%end%>
     </tbody>
@@ -43,15 +43,19 @@
 </div>
 <%= render "shared/loading_modal" %>
 <script>
-  $(".btn-lock").click(function(){
-    if ($(this+"i").hasClass("fa-lock") == true )  {
-      console.log("as")
-        $(this+"i").removeClass("fa-lock")
-        $(this+"i").addClass("fa-unlock")
-    }else{
-        $(this+"i").removeClass("fa-unlock")
-        $(this+"i").addClass("fa-lock")
-    };
-  });
+// $(document).ready(function(){
+  $("input[type='checkbox'].paid").prop('checked', true).change()
+  $("input[type='checkbox'].unpaid").prop('checked', false).change()
+// })
+  // $(".btn-lock").click(function(){
+  //   if ($(this+"i").hasClass("fa-lock") == true )  {
+  //     console.log("as")
+  //       $(this+"i").removeClass("fa-lock")
+  //       $(this+"i").addClass("fa-unlock")
+  //   }else{
+  //       $(this+"i").removeClass("fa-unlock")
+  //       $(this+"i").addClass("fa-lock")
+  //   };
+  // });
 
 </script>

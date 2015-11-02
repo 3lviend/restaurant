@@ -111,7 +111,7 @@
         <% @order.each_with_index do |i, index| %>
           <tr>
             <td><%= index+1 %></td>
-            <td><%= i.table.name %></td>
+            <td><%= i.table.name unless i.table.nil? %></td>
             <td><%= i.status %></td>
           </tr>
         <%end%>

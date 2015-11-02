@@ -1,0 +1,33 @@
+<hr>
+<br>
+<div class="row">
+<% if @table.blank? %>
+  <h4 class="text-center">All Table Is Full </h4>
+<% else %>
+  <% @table.each do |t| %>
+    <div class="col-md-3">
+      <% if t.available.eql? false %>
+        <%= link_to your_order_path(t.orders.last.id), "data-no-turbolink" => true do %>
+          <div class="table-all btn btn-danger ">
+            <% unless t.orders.last.blank? %>
+              <h5><b><%= t.name %>&nbsp;(Not Available)</b></h5>
+            <% end %>
+          </div>
+          <% end %>
+        <% else %>
+          <%= link_to new_order_table_line_items_path(t), "data-no-turbolink" => true do %>
+            <div class="table-all btn btn-info">
+              <h5><b><%= t.name %></b></h5>
+            </div>
+            <% end %>
+        <% end %>
+    </div>
+  <% end %>
+<% end %>
+</div>
+<script type="text/javascript">
+  function reload(){
+    window.location.reload();
+  };
+  setInterval('reload()', 300000);
+</script>

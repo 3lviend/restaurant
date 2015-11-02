@@ -1,0 +1,28 @@
+<div class="row">
+  <%= form_for @payment_method do |f| %>
+    <%# if @item.errors.any? %>
+      <!-- <ul class="alert alert-danger" style="margin-top:10px">
+        <%# @item.errors.full_messages.each do |msg| %>
+         <li style="margin-left:10px"><%#= msg %></li>
+        <%# end %>
+      </ul> -->
+    <%# end %>
+      <div class="col-md-4">
+        <%=f.label 'Payment Type' %>
+        <%=f.text_field :payment_type, class: "form-control", placeholder: "Debit Card", required:true %>
+        <br>
+            
+        <%= f.label 'Discount'%>
+        <div class="form-group input-group">
+          <%= f.number_field :discount, min: 0.1 , class: "form-control", placeholder: "1", required:true%>
+          <span class="input-group-addon">%</span>
+        </div>
+
+        <%= f.label 'Status' %>
+        <%= f.select :active, options_for_select([[ "Active","true"],["Not Active","false"] ], :selected => @payment_method.active),{},class: 'form-control' %>
+      <br>
+      <%= f.submit 'Save', class: 'btn btn-success' %>
+      <%= link_to 'Back', payment_methods_path, class: "btn btn-default", "data-no-turbolink" => true %>
+    </div>
+    <% end %>
+</div>

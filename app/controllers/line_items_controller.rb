@@ -9,10 +9,12 @@ class LineItemsController < ApplicationController
   def new
     @line_item = Order.create(:table_id => params[:table_id], :status => "unpaid").line_items.new
     @table = Table.update(params[:table_id], available: false);
+    @payment = Payment.create(order_id: @line_item.order_id)
   end
 
   def new_order_without_table
     @line_item = Order.create(:table_id => nil, :status => "unpaid").line_items.new
+    @payment = Payment.create(order_id: @line_item.order_id)
   end
 
   def edit;end

@@ -1,6 +1,7 @@
 class Order < ActiveRecord::Base
   belongs_to :table
   has_many :line_items
+  has_one :payment
 
   def self.search(params_date)
     date_from = params_date[:date_from] unless params_date.nil?

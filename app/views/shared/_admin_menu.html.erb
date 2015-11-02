@@ -38,13 +38,27 @@
     <i class="fa fa-table fa-fw"></i> Waitress
     <%end%>
 </li>
+
 <li>
-    <%= link_to orders_table_unpaid_path do %>
-      <i class="fa fa-table fa-fw"></i> Show Detail Orders
+    <%= link_to orders_path do %>
+        <i class="fa fa-table fa-fw"></i> Show Orders Today
     <% end %>
 </li>
+
 <li>
     <%= link_to warning_ingredients_path do %>
     <i class="fa fa-table fa-fw"></i> Ingredients Warning
     <%end%>
+</li>
+
+<li>
+    <%=  link_to additionals_path do %>
+    <i class="fa fa-table fa-fw"></i> Additionals
+    <% end %>
+</li>
+
+<li>
+    <%= link_to payment_methods_path do %>
+    <i class="fa fa-table fa-fw"></i> Discount
+    <% end %>
 </li>

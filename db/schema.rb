@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151013051726) do
+ActiveRecord::Schema.define(version: 20151029103457) do
+
+  create_table "additionals", force: :cascade do |t|
+    t.string   "additional_type", limit: 255
+    t.float    "amount",          limit: 24
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "active",          limit: 1
+  end
 
   create_table "ingredients", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -42,10 +50,27 @@ ActiveRecord::Schema.define(version: 20151013051726) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "table_id",   limit: 4
-    t.string   "status",     limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "table_id",      limit: 4
+    t.string   "status",        limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "total_payment", limit: 4
+  end
+
+  create_table "payment_methods", force: :cascade do |t|
+    t.string   "payment_type", limit: 255
+    t.float    "discount",     limit: 24
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.boolean  "active",       limit: 1
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "payment_number",    limit: 255
+    t.integer  "payment_method_id", limit: 4
+    t.integer  "order_id",          limit: 4
   end
 
   create_table "roles", force: :cascade do |t|

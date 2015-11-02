@@ -1,5 +1,5 @@
 <div class="row">
-<% if @unpaid.blank? %>
+<% if @order_warning.blank? %>
   <h3 class="text-muted text-center">No Orders to now</h3>
 <% end %>
   <% @order_warning.each_with_index do |o, i| %>
